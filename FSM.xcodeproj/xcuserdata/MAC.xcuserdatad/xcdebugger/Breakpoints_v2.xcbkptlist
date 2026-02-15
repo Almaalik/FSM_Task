@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "41E4780C-12DB-4AB4-A762-DBB53C29BED2"
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.SymbolicBreakpoint">
+         <BreakpointContent
+            uuid = "7A906049-D85B-4525-BF21-A999888D0D56"
+            shouldBeEnabled = "Yes"
+            nameForDebugger = "NSBundleURLFor"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            symbolName = "NSBundle"
+            moduleName = "">
+            <Locations>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>

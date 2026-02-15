@@ -11,7 +11,7 @@ import SwiftUI
 struct FSMApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            SplashVideoView()
         }
     }
 }
