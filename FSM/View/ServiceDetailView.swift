@@ -36,22 +36,14 @@ struct ServiceDetailView: View {
             
             Divider()
             
-            // MARK: - Scrollable Content
+            // MARK: - Scrollable Main Content
             ScrollView {
                 VStack(spacing: 20) {
                     
-                   
-                    Map(coordinateRegion: $region,
-                        annotationItems: [service]) { service in
-                        
-                        MapMarker(
-                            coordinate: CLLocationCoordinate2D(
-                                latitude: service.latitude,
-                                longitude: service.longitude
-                            )
-                        )
-                        
-                    }
+                ServiceMapView(
+                        latitude: service.latitude,
+                        longitude: service.longitude
+                    )
                     .frame(height: 180)
                     .clipShape(RoundedRectangle(cornerRadius: 20))
                     .padding(.horizontal)
@@ -61,23 +53,18 @@ struct ServiceDetailView: View {
                         
                         titleSection
                         
-                        
                         detailRow(icon: "user",
                                   title: "Customer",
                                   value: service.customerName)
-                        
                         detailRow(icon: "file",
                                   title: "Description",
                                   value: service.description)
-                        
                         detailRow(icon: "clock-check",
                                   title: "Scheduled Time",
                                   value: service.scheduledDate.smartFormatted())
-                        
                         detailRow(icon: "map-pin",
                                   title: "Location",
                                   value: "Seattle, WA")
-                        
                         detailRow(icon: "message",
                                   title: "Service Notes",
                                   value: service.notes)
@@ -117,7 +104,6 @@ private extension ServiceDetailView {
     
     var titleSection: some View {
         HStack {
-                
                 Text(service.title)
                     .font(.title2)
                     .fontWeight(.semibold)

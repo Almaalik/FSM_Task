@@ -11,7 +11,7 @@ import SwiftUI
 struct ServiceStatusBadge: View {
     
     let status: ServiceStatus
-    
+    //Re-usable status badge in Service List and Detail page
     var body: some View {
         HStack(spacing: 6) {
             

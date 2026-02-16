@@ -11,7 +11,8 @@ import SwiftUI
 struct ServicesListView: View {
     
     @StateObject private var viewModel = ServicesViewModel()
-    @State private var searchText = ""
+    @State private var selectedService: Service? = nil
+    @State private var showDetail = false
     @FocusState private var isSearchFocused: Bool
     
     var body: some View {
@@ -19,50 +20,53 @@ struct ServicesListView: View {
             VStack(spacing: 0) {
                 
                 headerView
-                    .padding(10)
+                    .padding(8)
                 Divider()
+                    .padding(8)
                 
-                ScrollView {
+                if viewModel.shouldShowEmptyState {
+                    emptyStateView
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                } else {
                     
-                    if viewModel.shouldShowEmptyState {
-                        emptyStateView
-                        
-                    } else {
-                        
-                        LazyVStack(spacing: 16) {
-                            ForEach(viewModel.filteredServices) { service in
-                                NavigationLink(value: service) {
-                                    ServiceCardView(service: service)
-                                }
-                                .buttonStyle(.plain)
-                                .simultaneousGesture(TapGesture().onEnded {
+                    List {
+                        ForEach(viewModel.filteredServices) { service in
+                            
+                            ServiceCardView(service: service)
+                                .padding(.vertical, 8)
+                                .listRowSeparator(.hidden)
+                                .listRowInsets(EdgeInsets(
+                                    top: 0,
+                                    leading: 16,
+                                    bottom: 0,
+                                    trailing: 16
+                                ))
+                                .listRowBackground(Color.clear)
+                                .contentShape(Rectangle())
+                                .onTapGesture {
                                     isSearchFocused = false
-                                })
-                            }
+                                    selectedService = service
+                                    showDetail = true
+                                }
                         }
-                        .padding(.horizontal)
-                        .padding(.top, 12)
+                    }
+                    .listStyle(.plain)
+                    .scrollContentBackground(.hidden)
+                    .background(Color(.systemBackground))
+                    .refreshable {
+                        await viewModel.refresh()
                     }
                 }
-                .scrollIndicators(.hidden)
-                .refreshable {
-                    await viewModel.refresh()
-                }
             }
-
-            .background(Color(.systemBackground))
-            .navigationDestination(for: Service.self) { service in
-                if #available(iOS 17.0, *) {
+            .navigationDestination(isPresented: $showDetail) {
+                if let service = selectedService {
                     ServiceDetailView(service: service)
-                } else {
-                    // Fallback on earlier versions
                 }
             }
+            .navigationBarTitleDisplayMode(.inline)
         }
     }
 }
-
-
 
 
 private extension ServicesListView {
@@ -76,7 +80,6 @@ private extension ServicesListView {
                 .frame(maxWidth: .infinity, alignment: .center)
             
             searchBar
-            
         }
         .padding(.horizontal)
         .padding(.top)
@@ -96,15 +99,12 @@ private extension ServicesListView {
                 .textInputAutocapitalization(.never)
                 .focused($isSearchFocused)
                 .submitLabel(.done)
-            
-
-            
+                        
             Image(systemName: "mic.fill")
                 .foregroundColor(.gray)
         }
         .padding(12)
         .background(Color(.systemGray5))
-
         .cornerRadius(12)
     }
 }
@@ -120,10 +120,10 @@ private extension ServicesListView {
                 .font(.system(size: 50))
                 .foregroundColor(.gray)
             
-            Text("No Services Found")
+            Text("No Search Results Found")
                 .font(.headline)
             
-            Text("Try adjusting your search.")
+            Text("Try something else.")
                 .foregroundColor(.secondary)
         }
         .padding(.top, 60)

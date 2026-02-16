@@ -48,7 +48,6 @@ struct ServiceCardView: View {
             HStack {
                 ServiceStatusBadge(status: service.status)
 
-                
                 Spacer()
                 
                 Text(service.scheduledDate.smartFormatted())

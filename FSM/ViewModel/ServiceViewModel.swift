@@ -42,7 +42,6 @@ final class ServicesViewModel: ObservableObject {
         !searchText.isEmpty && filteredServices.isEmpty
     }
     
-    // MARK: - Private Methods
     
     private func setupSearch() {
         $searchText
